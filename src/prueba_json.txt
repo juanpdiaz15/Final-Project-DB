@@ -1,3 +1,17 @@
+http://localhost:5000/lped
+http://localhost:5000/cliente
+http://localhost:5000/detalles
+http://localhost:5000/opedidos
+http://localhost:5000/ocliente
+http://localhost:5000/odetalles
+http://localhost:5000/detalles_pedidos
+http://localhost:5000/pedido/10
+http://localhost:5000/cliente/18
+http://localhost:5000/detalle/12
+http://localhost:5000/bpedido/7
+http://localhost:5000/bcliente/9
+http://localhost:5000/bdetalles/13
+
 NUEVA LISTAPEDIDOS
 {
   "clientesid": "16",
