@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1>Lista de Pedidos</h1>
+
+    <!-- Formulario para crear un nuevo pedido -->
+    <form id="crearPedidoForm">
+        <div class="form-group">
+            <label for="clientesid">Clientes ID:</label>
+            <input type="text" class="form-control" id="clientesid" required>
+        </div>
+        <div class="form-group">
+            <label for="viaid">Via ID:</label>
+            <input type="text" class="form-control" id="viaid" required>
+        </div>
+        <div class="form-group">
+            <label for="almacenid">Almacen ID:</label>
+            <input type="text" class="form-control" id="almacenid" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="crearNuevoPedido()">Crear Pedido</button>
+    </form>
+
+    <!-- Tabla para mostrar todos los pedidos -->
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Clientes ID</th>
+                <th>Via ID</th>
+                <th>Almacen ID</th>
+                <th>Fecha de Pedido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaPedidosBody">
+            <!-- Aquí se mostrarán los pedidos -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Función para crear un nuevo pedido
+    function crearNuevoPedido() {
+        // Obtener los valores del formulario
+        const clientesid = document.getElementById('clientesid').value;
+        const viaid = document.getElementById('viaid').value;
+        const almacenid = document.getElementById('almacenid').value;
+
+        // Enviar la solicitud al servidor
+        fetch('/lped', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                clientesid,
+                viaid,
+                almacenid
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Limpiar el formulario después de crear el pedido
+            document.getElementById('crearPedidoForm').reset();
+            // Recargar la tabla de pedidos
+            cargarTablaPedidos();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función para cargar la tabla de pedidos
+    function cargarTablaPedidos() {
+        // Obtener la tabla de pedidos
+        const tablaPedidosBody = document.getElementById('tablaPedidosBody');
+
+        // Limpiar la tabla antes de cargar los nuevos datos
+        tablaPedidosBody.innerHTML = '';
+
+        // Obtener los pedidos del servidor
+        fetch('/opedidos')
+        .then(response => response.json())
+        .then(data => {
+            // Iterar sobre los pedidos y agregarlos a la tabla
+            data.forEach(pedido => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${pedido.ClientesID}</td>
+                    <td>${pedido.ViaID}</td>
+                    <td>${pedido.AlmacenID}</td>
+                    <td>${pedido.FechaPedido}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="actualizarPedido(${pedido.listapedidosID})">Actualizar</button>
+                        <button class="btn btn-danger" onclick="borrarPedido(${pedido.listapedidosID})">Eliminar</button>
+                    </td>
+                `;
+                tablaPedidosBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function actualizarPedido(pedidoId) {
+        // Obtener los nuevos valores del formulario (puedes implementar un formulario modal para editar)
+        const nuevosValores = prompt("Ingrese los nuevos valores separados por coma");
+
+        // Enviar la solicitud al servidor
+        fetch(`/apedido/${pedidoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nuevos_valores: nuevosValores.split(','),
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mostrar mensaje de éxito o error
+            alert(data.message);
+            // Recargar la tabla de pedidos
+            cargarTablaPedidos();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función para borrar un pedido
+    function borrarPedido(pedidoId) {
+        // Confirmar si el usuario realmente desea eliminar el pedido
+        const confirmacion = confirm("¿Estás seguro de que deseas eliminar este pedido?");
+
+        if (confirmacion) {
+            // Enviar la solicitud al servidor
+            fetch(`/bpedido/${pedidoId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar mensaje de éxito o error
+                alert(data.message);
+                // Recargar la tabla de pedidos
+                cargarTablaPedidos();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+
+    // Cargar la tabla de pedidos al cargar la página
+    cargarTablaPedidos();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+NUEVA LISTAPEDIDOS
+{
+  "clientesid": "16",
+  "viaid": "1",
+  "almacenid": "1"
+}
+ACTUALIZAR PEDIDO
+{
+  "nuevos_valores": {
+    "Costo": 200.0,
+    "Listaprodutos": "existente Producto",
+    "FechaPedido": "2023-12-24"
+    // Agrega otros campos que desees actualizar
+  }
+}
+
+NUEVO CLIENTE
+{
+  "nombres": "Luis",
+  "apellidos": "Beckam",
+  "direccion": "sapo",
+  "cedula": "1715489635",
+  "telefono": "1234567890",
+  "tipopago": "1"
+}
+ACTUALIZAR CLIENTE
+{
+  "nuevos_valores": {
+    "Apellidos": "Gómez",
+    "TipoPago": 3,
+    "Direccion": "Nueva dirección",
+    "Telefono": 555123456
+    // Agrega otros campos que desees actualizar
+  }
+}
+
+NUEVO DETALLES
+{
+  "ProductoID": "2",
+  "AlmacenID": "1",
+  "Cantidad": "30",
+  "Costo": "20.0"
+}
+ACTUALIZAR DETALLES
+{
+  "nuevos_valores": {
+    "ProductoID": "1",
+    "Cantidad": "80"
+  }
+}
