@@ -19,5 +19,4 @@ This web application provides an interface to manage order lists, product detail
 ## How to Use
 
 - Run the application with python app.py. The examples of use are inside test_json
-- Access the interface at http://localhost:5000 from your browser.
-
+- Access the interface at http://localhost:5000 from your browser
